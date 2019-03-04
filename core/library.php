@@ -344,4 +344,96 @@ class Library
         }
     }
 
+    public function student_attends_lesson($id)
+    {
+        //SELECT `at_student_id` FROM `attends` WHERE `at_lesson_id`= :id
+        try 
+        {
+            $db = DB();
+            $query = $db->prepare("SELECT `at_student_id` FROM `attends` WHERE `at_lesson_id`= :id");
+            $query->bindParam("id", $id, PDO::PARAM_INT);
+            $query->execute();
+            if ($query->rowCount() > 0)
+            {
+                $result = $query->fetch();
+                return $result;
+            }
+            else
+            {
+                return 0;
+            }
+        } 
+        catch (PDOException $e) 
+        {
+            exit($e->getMessage());
+        }
+
+    }
+
+    public function insert_notification($type, $tag, $student, $lesson, $text)
+    {
+        try {
+            $db = DB();
+            $now = date("Y-m-d");
+            switch ($type) 
+            {
+                case 1:
+                    // for student
+                    $query = $db->prepare("INSERT INTO `notification`(`not_date`, `not_tag_id`, `not_lesson_id`, `not_student_id`, `not_text`) VALUES (:d,:t,:l,:s,:tx)");
+                    $query->bindParam("d",  $now, PDO::PARAM_STR);
+                    $query->bindParam("t",  $tag, PDO::PARAM_INT);
+                    $query->bindParam("l",  $lesson, PDO::PARAM_INT);
+                    $query->bindParam("s",  $student, PDO::PARAM_INT);
+                    $query->bindParam("tx", $text, PDO::PARAM_STR);
+                    $query->execute();
+                    break;
+                case 2:
+                    // for lesson
+                    // push this notification in all students attending the course
+                    $list = $this->student_attends_lesson($lesson);
+                    $query = $db->prepare("INSERT INTO `notification`(`not_date`, `not_tag_id`, `not_lesson_id`, `not_student_id`, `not_text`) VALUES (:d,:t,:l,:s,:tx)");
+                    foreach ($list as $item) {
+                        $query->bindParam("d",  $now,    PDO::PARAM_STR);
+                        $query->bindParam("t",  $tag,    PDO::PARAM_INT);
+                        $query->bindParam("l",  $lesson, PDO::PARAM_INT);
+                        $query->bindParam("s",  $item,   PDO::PARAM_INT);
+                        $query->bindParam("tx", $text,   PDO::PARAM_STR);
+                        $query->execute();
+                    }
+                    break;
+                case 3:
+                    // for all
+                    break;
+            }
+            
+            
+            
+            return $db->lastInsertId();
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    public function get_all_notifications()
+    {
+        try 
+        {
+            $db = DB();
+            $query = $db->prepare("SELECT * FROM `notification`");
+            $query->execute();
+            if ($query->rowCount() > 0) 
+            {
+                return $query->fetchAll();
+            }
+            else
+            {
+                return 0;
+            }
+        } 
+        catch (PDOException $e) 
+        {
+            exit($e->getMessage());
+        }
+    }
+
 }

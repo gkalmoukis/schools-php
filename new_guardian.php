@@ -1,10 +1,10 @@
 <?php
-/*
- * giokalm 
- *
- * Page new_lesson.php
- * 
- * */
+session_start();
+
+if(empty($_SESSION['id']))
+{
+    header("Location: login.php");
+}
 require './core/library.php';
 $app = new Library();
 
