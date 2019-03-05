@@ -7,6 +7,8 @@ if(empty($_SESSION['id']))
     header("Location: login.php");
 }
 require './core/library.php';
+require './common/alert.php';
+
 $app = new Library();
 $error_message = "";
 $success_message = "";
@@ -72,35 +74,17 @@ if (!empty($_POST['add']))
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-          <!-- error alert -->
-          <?php
-            if ($error_message != "") {
+          <!-- request response -->
+          <?php 
+            if($success_message != "")
+            {
+              echo success($success_message);
+            }
+            if($error_message != "")
+            {
+              echo failure($error_message);
+            }
           ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <?php echo $error_message; ?>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <?php
-            }
-            ?>
-            <!-- /error alert -->
-
-            <!-- success alert -->
-            <?php
-            if ($success_message != "") {
-            ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <?php echo $success_message; ?>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <?php
-            }
-            ?>
-            <!-- /success alert -->  
           
     
           <!-- Basic Card Example -->

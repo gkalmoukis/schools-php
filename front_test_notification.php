@@ -77,7 +77,7 @@
                 {
                     
                     echo "<span class='badge badge-pill badge-primary'>"
-                         .$app->get_tag($notification["not_tag_id"])["tag_name"]
+                         .$app->get_tag($notification["not_tag_id"])->tag_name
                          ."</span>";
                 }
                 if($notification["not_lesson_id"] != -1)

@@ -16,7 +16,7 @@ if(empty($_SESSION['id']))
   //get lessons
   $lessons = $app->get_all_lessons();
   //get tags
-  $tags = $app->get_all_tags();
+  $tags = $app->get_tags();
   if(!empty($_POST['submit']) )
   {
     extract($_POST);
@@ -152,7 +152,7 @@ if(empty($_SESSION['id']))
                                 <?php 
                                         foreach ($tags as $option) {
                                     ?>
-                                        <option value='<?php echo $option['tag_id']; ?>' ><?php echo $option['tag_name']; ?></option>
+                                        <option value='<?php echo $option->tag_id; ?>' ><?php echo $option->tag_name; ?></option>
                                     <?php
                                             
                                         }

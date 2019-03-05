@@ -103,7 +103,7 @@
                             {
                                 
                                 echo "<span class='badge badge-pill badge-primary'>"
-                                     .$app->get_tag($row->not_tag_id)["tag_name"]
+                                     .$app->get_tag($row->not_tag_id)->tag_name
                                      ."</span>";
                             }
                           ?>

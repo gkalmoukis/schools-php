@@ -10,7 +10,7 @@ if(empty($_SESSION['id']))
   $app = new Library();
   
   //get all tags
-  $tags = $app->get_all_tags();
+  $tags = $app->get_tags();
   
 ?>
 <!DOCTYPE html>
@@ -24,7 +24,7 @@ if(empty($_SESSION['id']))
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title>Ετικέτες</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -68,12 +68,12 @@ if(empty($_SESSION['id']))
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Μαθήματα</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Πίνακας ετικετών</h6>
             </div>
             <div class="card-body">
               <?php 
                 
-                if (count($tags) == 0) 
+                if ($tags == []) 
                 {
                     echo "no tags";
                 }
@@ -98,7 +98,7 @@ if(empty($_SESSION['id']))
                   {  
                   ?>      
                     <tr>
-                        <td><?php echo $row["tag_name"]; ?></td>
+                        <td><?php echo $row->tag_name; ?></td>
                     </tr>
                   <?php } ?>      
                     

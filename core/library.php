@@ -6,9 +6,89 @@ require 'database.php';
  * Page: Application library
  * */
 
+
+
 class Library
 {
+    // TAGS
+    
+    /*
+     * Create tag
+     * @param $name
+     * @return ID
+     * */
+    public function new_tag($name)
+    {
+        try {
+            $db = DB();
+            $query = $db->prepare("INSERT INTO `tag`(`tag_name`) VALUES (:n)");
+            $query->bindParam("n", $name, PDO::PARAM_STR);
+            $query->execute();
+            return $db->lastInsertId();
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
 
+    /*
+     * Read all tags
+     * @return array
+     * */
+    public function get_tags()
+    {
+        try 
+        {
+            $db = DB();
+            $query = $db->prepare("SELECT * FROM `tag`");
+            $query->execute();
+            if ($query->rowCount() > 0) 
+            {
+                return $query->fetchAll(PDO::FETCH_OBJ);
+            }
+            else
+            {
+                return [];
+            }
+        } 
+        catch (PDOException $e) 
+        {
+            exit($e->getMessage());
+        }
+    }
+
+    /*
+     * Read tag 
+     * @param $id 
+     * @return mixed
+     * 
+     * */
+    public function get_tag($id)
+    {
+        try 
+        {
+            $db = DB();
+            $query = $db->prepare("SELECT * FROM `tag` WHERE `tag_id` = :id ");
+            $query->bindParam("id", $id, PDO::PARAM_INT);
+            $query->execute();
+            if ($query->rowCount() > 0)
+            {
+                $result = $query->fetch(PDO::FETCH_OBJ);
+                return $result;
+            }
+            else
+            {
+                return -1;
+            }
+        } 
+        catch (PDOException $e) 
+        {
+            exit($e->getMessage());
+        }
+    }
+
+    // END OF TAGS
+    
+    
     /*
      * Register New User
      * INSERT INTO `user`(`usr_id`, `usr_name`, `usr_email`, `usr_key`) VALUES ()
@@ -55,19 +135,7 @@ class Library
         }
     }
 
-    public function new_tag($name)
-    {
-        try {
-            $db = DB();
-
-            $query = $db->prepare("INSERT INTO `tag`(`tag_name`) VALUES (:n)");
-            $query->bindParam("n", $name, PDO::PARAM_STR);
-            $query->execute();
-            return $db->lastInsertId();
-        } catch (PDOException $e) {
-            exit($e->getMessage());
-        }
-    }
+    
 
     /*
      * Insert new lesson
@@ -212,22 +280,7 @@ class Library
             exit($e->getMessage());
         }
     }
-
-    public function get_all_tags()
-    {
-        try 
-        {
-            $db = DB();
-            $query = $db->prepare("SELECT * FROM `tag`");
-            $query->execute();
-            return $query->fetchAll();
-            
-        } 
-        catch (PDOException $e) 
-        {
-            exit($e->getMessage());
-        }
-    }
+    
 
     public function get_student_lessons($id)
     {
@@ -461,29 +514,7 @@ class Library
     }
 
 
-    public function get_tag($id)
-    {
-        try 
-        {
-            $db = DB();
-            $query = $db->prepare("SELECT * FROM `tag` WHERE `tag_id` = :id ");
-            $query->bindParam("id", $id, PDO::PARAM_INT);
-            $query->execute();
-            if ($query->rowCount() > 0)
-            {
-                $result = $query->fetch();
-                return $result;
-            }
-            else
-            {
-                return 0;
-            }
-        } 
-        catch (PDOException $e) 
-        {
-            exit($e->getMessage());
-        }
-    }
+    
 
     public function get_lesson($id)
     {
