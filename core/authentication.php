@@ -5,7 +5,6 @@ require 'database.php';
  *
  * class: authentication library
  * */
-
 class Authentication
 {
     /*

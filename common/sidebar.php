@@ -37,7 +37,7 @@
     <div class="bg-white py-2 collapse-inner rounded">
       <h6 class="collapse-header">Σελιδες:</h6>
       <a class="collapse-item" href="administrators.php">Κατάλογος Διαχειριστών</a>
-      <a class="collapse-item" href="register.php">Νέος Διαχειριστής</a>
+      <a class="collapse-item" href="new_admin.php">Νέος Διαχειριστής</a>
     </div>
   </div>
 </li>

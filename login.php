@@ -1,4 +1,5 @@
 <?php
+  ob_start();
   session_start();
   require './core/authentication.php';
   $auth = new Authentication();
@@ -26,7 +27,8 @@
         }
         else if($user["usr_role"] == 2)
         {
-          echo "front-end";
+
+          header("Location: guardian_front_test.php");
         }
         
       }

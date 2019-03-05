@@ -1,14 +1,19 @@
 <?php 
-ob_start(); 
+  ob_start();
   session_start();
 
   if(empty($_SESSION['id']))
   {
-      header("Location: login.php");
+    header("Location: login.php");
   }
+
   require './core/library.php';
   $app = new Library();
+
+  
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +25,7 @@ ob_start();
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title>SB Admin 2 - Dashboard</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -31,92 +36,113 @@ ob_start();
 
   <!-- Custom styles for this page -->
   <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
 </head>
 
 <body id="page-top">
 
   <!-- Page Wrapper -->
   <div id="wrapper">
-
-    <!-- Sidebar -->
-    <?php include './common/sidebar.php'; ?>
+    
+  <!-- Sidebar -->
+  <?php include './common/gurardian_front_sidebar.php' ?>
     <!-- End of Sidebar -->
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
       <!-- Main Content -->
-      <div id="content">
+      <div id="c1ntent">
 
-        <!-- Topbar -->
+        <!-- top1ar -->
         <?php include './common/topbar.php'; ?>
-        <!-- End of Topbar -->
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
-          <!-- Page Heading -->
-          <h1 class="h3 mb-2 text-gray-800">Κατάλογος Κηδεμόνων</h1>
-          <p class="mb-4">Για την εισαγωγή νέου κηδεμόνα επισκεφτείτε την φόρμα <a href="new_guardian.php">εισαγωγής νέου κηδεμόνα</a>.</p>
+          
 
-          <!-- DataTales Example -->
-          <div class="card shadow mb-4">
+          
+          
+        <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Διαθέσιμοι Κηδεμόνες</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Πρόσφατες ανακοινώσεις</h6>
             </div>
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>Όνομα</th>
-                      <th>Email</th>
+                      <th>date</th>
+                      <th>name</th>
+                      <th>tag</th>
+                      <th>actions</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
-                      <th>Όνομα</th>
-                      <th>Email</th>
+                    <th>date</th>
+                    <th>name</th>
+                    <th>tag</th>
+                    <th>actions</th>
                     </tr>
                   </tfoot>
                   <tbody>
                   <?php
-                    if($app->get_all_users(2) == 0)
-                    {
-                        // todo na paei auth i sinthiki panw apo ton pinaka
-                    } 
-                    else
-                    {
-                      foreach ($app->get_all_users(2) as $key) 
+                    
+                  
+                      foreach ($app->notifications_for_guardian($_SESSION["id"]) as $row) 
                       {
                   ?>
                         <tr>
-                          <td><?php echo $key["usr_name"]; ?></td>
-                          <td><?php echo $key["usr_email"]; ?></td>
+                          <td><?php echo $row->not_date; ?></td>
+                          <td><?php echo $row->not_student_id; ?></td>
+                          <td>
+                          <?php 
+                            if($row->not_tag_id != -1)
+                            {
+                                
+                                echo "<span class='badge badge-pill badge-primary'>"
+                                     .$app->get_tag($row->not_tag_id)["tag_name"]
+                                     ."</span>";
+                            }
+                          ?>
+                          </td>
+                          <td>
+                            <?php 
+                                echo  "<a href='front_test_notification.php?id=".$row->not_id."' class='btn btn-primary btn-circle'>".
+                                        "<i class='fas fa-eye'></i>".
+                                       "</a>";
+                            ?>
+                        </td>
+                          
                         </tr>
                   <?php
                       }
-                    }  
+                    
                   ?>
 
                   </tbody>
                 </table>
               </div>
             </div>
-          </div>
-
         </div>
+
+
+
         <!-- /.container-fluid -->
 
       </div>
       <!-- End of Main Content -->
-
-      <!-- Footer -->
-      <?php include './common/footer.php';  ?> 
-      <!-- End of Footer -->
+                
+      
 
     </div>
     <!-- End of Content Wrapper -->
+
+    <!-- Footer -->
+    <?php include './common/footer.php'; ?>
+      <!-- End of Footer -->
 
   </div>
   <!-- End of Page Wrapper -->
@@ -139,12 +165,12 @@ ob_start();
   <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>
 
-  <!-- Page level plugins -->
-  <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+   <!-- Page level plugins -->
+   <script src="vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-  <!-- Page level custom scripts -->
+  
   <script src="js/demo/datatables-demo.js"></script>
+
 
 </body>
 

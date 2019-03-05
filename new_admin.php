@@ -7,34 +7,35 @@ if(empty($_SESSION['id']))
     header("Location: login.php");
 }
 require './core/library.php';
+require './common/alert.php';
 $app = new Library();
 
-$register_error_message = "";
-$register_success_message = "";
+$error_message = "";
+$success_message = "";
 // check register request
-if (!empty($_POST['submit_register'])) 
+if (!empty($_POST['submit_guardian'])) 
 {
     extract($_POST);
     if ($firstname == "" || $lastname == "" || $email == "" || $password == "" || $repassword == "") 
     {
-        $register_error_message = "Μη Συμπληρωμένη φόρμα";
+        $error_message = "Μη Συμπληρωμένη φόρμα";
     }  
     else if ($password != $password) 
     {
-        $register_error_message = "Οι κωδικοί δεν ταιρίαζουν";
+        $error_message = "Οι κωδικοί δεν ταιρίαζουν";
     } 
     else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
     {
-        $register_error_message = 'Λανθασμένη μορφή email';
+        $error_message = 'Λανθασμένη μορφή email';
     } 
     else if ($app->isEmail($_POST['email'])) 
     {
-        $register_error_message = 'Το email υπάρχει';
+        $error_message = 'Το email υπάρχει';
     } 
     else 
     {
         $app->Register($firstname, $lastname, $email, $password, 1);
-        $register_success_message = "Ολα γκούντ!";
+        $success_message = "Ολα γκούντ!";
     }
 }
 ?>
@@ -49,7 +50,7 @@ if (!empty($_POST['submit_register']))
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Δημιουργία λογαριασμού</title>
+  <title>SB Admin 2 - Blank</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -60,50 +61,48 @@ if (!empty($_POST['submit_register']))
 
 </head>
 
-<body class="bg-gradient-primary">
+<body id="page-top">
 
-  <div class="container">
+  <!-- Page Wrapper -->
+  <div id="wrapper">
 
-    <div class="card o-hidden border-0 shadow-lg my-5">
-      <div class="card-body p-0">
-        <!-- Nested Row within Card Body -->
-        <div class="row">
-          <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-          <div class="col-lg-7">
-            <div class="p-5">
-              <div class="text-center">
-                <h1 class="h4 text-gray-900 mb-4">Δημιουργία λογαριασμού</h1>
-              </div>
-              
-              <!-- error alert -->
-              <?php
-              if ($register_error_message != "") {
-              ?>
-              <div class="card mb-4 py-3 border-left-danger">
-                <div class="card-body">
-                  <?php echo $register_error_message; ?>
-                </div>
-              </div>
-              <?php
-              }
-              ?>
-              <!-- /error alert -->
+    <!-- Sidebar -->
+    <?php include './common/sidebar.php'; ?>
+    <!-- End of Sidebar -->
 
-              <!-- success alert -->
-              <?php
-              if ($register_success_message != "") {
-              ?>
-              <div class="card mb-4 py-3 border-left-success">
-                <div class="card-body">
-                  <?php echo $register_success_message; ?>
-                </div>
-              </div>
-              <?php
-              }
-              ?>
-              <!-- /success alert -->
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
 
-              <form class="user" method="post">
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <?php include './common/topbar.php'; ?>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+          <!-- request response -->
+          <?php 
+            if($success_message != "")
+            {
+              echo success($success_message);
+            }
+            if($error_message != "")
+            {
+              echo failure($error_message);
+            }
+          ?>
+           
+          
+    
+          <!-- Basic Card Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Φόρμα εισαγωγής νέου διαχειρηστή</h6>
+            </div>
+            <div class="card-body">
+            <form class="user" method="post">
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
                     <input type="text" id="firstname" name="firstname" placeholder="Όνομα" class="form-control form-control-user">
@@ -123,20 +122,38 @@ if (!empty($_POST['submit_register']))
                     <input type="password" id="repassword" name="repassword"  placeholder="Επαλήθευση κωδικού" class="form-control form-control-user">
                   </div>
                 </div>
-                <input type="submit" name="submit_register" class="btn btn-primary btn-user btn-block" value="Εγγραφή">
+                <input type="submit" name="submit_guardian" class="btn btn-primary btn-user btn-block" value="Εισαγωγή">
                 <hr>
               </form>
-              <hr>
-              <div class="text-center">
-                <a class="small" href="login.html">Έχετε ήδη λογαριασμό;</a>
-              </div>
             </div>
           </div>
+
+          
+          
+
         </div>
+        <!-- /.container-fluid -->
+
       </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <?php include './common/footer.php'; ?>
+      <!-- End of Footer -->
+
     </div>
+    <!-- End of Content Wrapper -->
 
   </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+  <?php include './common/logout_modal.php'; ?>
 
   <!-- Bootstrap core JavaScript-->
   <script src="vendor/jquery/jquery.min.js"></script>

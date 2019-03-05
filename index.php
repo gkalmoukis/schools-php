@@ -1,4 +1,5 @@
 <?php 
+ob_start();
   session_start();
 
   if(empty($_SESSION['id']))
@@ -7,9 +8,7 @@
   }
 
   require './core/library.php';
-  
   $app = new Library();
-
   //get all students
   $count_students = count($app->get_all_students());
   //get all guardians

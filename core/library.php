@@ -436,4 +436,100 @@ class Library
         }
     }
 
+    public function get_notifications($id)
+    {
+        try 
+        {
+            $db = DB();
+            $query = $db->prepare("SELECT * FROM `notification` WHERE `not_id` = :id ");
+            $query->bindParam("id", $id, PDO::PARAM_INT);
+            $query->execute();
+            if ($query->rowCount() > 0)
+            {
+                $result = $query->fetch();
+                return $result;
+            }
+            else
+            {
+                return 0;
+            }
+        } 
+        catch (PDOException $e) 
+        {
+            exit($e->getMessage());
+        }
+    }
+
+
+    public function get_tag($id)
+    {
+        try 
+        {
+            $db = DB();
+            $query = $db->prepare("SELECT * FROM `tag` WHERE `tag_id` = :id ");
+            $query->bindParam("id", $id, PDO::PARAM_INT);
+            $query->execute();
+            if ($query->rowCount() > 0)
+            {
+                $result = $query->fetch();
+                return $result;
+            }
+            else
+            {
+                return 0;
+            }
+        } 
+        catch (PDOException $e) 
+        {
+            exit($e->getMessage());
+        }
+    }
+
+    public function get_lesson($id)
+    {
+        try 
+        {
+            $db = DB();
+            $query = $db->prepare("SELECT * FROM `lesson` WHERE `le_id` = :id ");
+            $query->bindParam("id", $id, PDO::PARAM_INT);
+            $query->execute();
+            if ($query->rowCount() > 0)
+            {
+                $result = $query->fetch();
+                return $result;
+            }
+            else
+            {
+                return 0;
+            }
+        } 
+        catch (PDOException $e) 
+        {
+            exit($e->getMessage());
+        }
+    }
+
+    public function notifications_for_guardian($id)
+    {
+        try 
+        {
+            $db = DB();
+            $query = $db->prepare("SELECT * FROM `notification` WHERE `not_student_id` in ( SELECT `stu_id` FROM `student` WHERE `stu_guardian_id` = :id)");
+            $query->bindParam("id",  $id, PDO::PARAM_INT);
+            $query->execute();
+            if ($query->rowCount() > 0) 
+            {
+                return $query->fetchAll(PDO::FETCH_OBJ);
+            }
+            else
+            {
+                return 0;
+            }
+        } 
+        catch (PDOException $e) 
+        {
+            exit($e->getMessage());
+        }
+    }
+
 }
