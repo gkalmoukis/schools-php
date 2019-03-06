@@ -1,18 +1,13 @@
 <?php
-ob_start();
-session_start();
-
-if(empty($_SESSION['id']))
-{
-    header("Location: login.php");
-}
+require './core/auth.php';
 require './core/library.php';
+require './common/alert.php';
 $app = new Library();
 
 $error_message = "";
 $success_message = "";
 // check register request
-if (!empty($_POST['submit_lesson'])) 
+if (!empty($_POST['submit'])) 
 {
     extract($_POST);
     if ($name == "") 
@@ -22,7 +17,7 @@ if (!empty($_POST['submit_lesson']))
     else 
     {
         $app->new_lesson($name);
-        $success_message = "Ολα γκούντ!";
+        $success_message = "Εντάξει!";
     }
 }
 ?>
@@ -37,7 +32,7 @@ if (!empty($_POST['submit_lesson']))
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title>Προσθήκη μαθήματος</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -69,33 +64,17 @@ if (!empty($_POST['submit_lesson']))
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-          <!-- error alert -->
-          <?php
-            if ($error_message != "") {
+          <!-- request response -->
+          <?php 
+            if($success_message != "")
+            {
+              echo success($success_message);
+            }
+            if($error_message != "")
+            {
+              echo failure($error_message);
+            }
           ?>
-            <div class="card mb-4 py-3 border-left-danger">
-            <div class="card-body">
-                <?php echo $error_message; ?>
-            </div>
-            </div>
-            <?php
-            }
-            ?>
-            <!-- /error alert -->
-
-            <!-- success alert -->
-            <?php
-            if ($success_message != "") {
-            ?>
-            <div class="card mb-4 py-3 border-left-success">
-            <div class="card-body">
-                <?php echo $success_message; ?>
-            </div>
-            </div>
-            <?php
-            }
-            ?>
-            <!-- /success alert -->  
           
     
           <!-- Basic Card Example -->
@@ -108,7 +87,7 @@ if (!empty($_POST['submit_lesson']))
                     <div class="form-group">
                         <input type="text" id="name" name="name" placeholder="Όνομα μαθήματος" class="form-control form-control-user">
                     </div>
-                    <input type="submit" name="submit_lesson" class="btn btn-primary btn-user btn-block" value="Εισαγωγή">
+                    <input type="submit" name="submit" class="btn btn-primary btn-user btn-block" value="Εισαγωγή">
                     <hr>
                 </form>
             </div>

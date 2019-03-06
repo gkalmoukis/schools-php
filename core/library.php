@@ -197,25 +197,169 @@ class Library
 
     // END OF USER
 
-    /*
-     * Insert new lesson
-     * INSERT INTO `lesson`(`le_name`) VALUES ()
-     * @param $name, $email, $username, $password
+
+    // LESSON
+
+     /*
+     * Create a lesson
+     * @param $name
      * @return ID
      * */
     public function new_lesson($name)
     {
-        try {
+        try 
+        {
             $db = DB();
-
             $query = $db->prepare("INSERT INTO `lesson`(`le_name`) VALUES (:n)");
             $query->bindParam("n", $name, PDO::PARAM_STR);
+            $query->execute();
+            return $db->lastInsertId();
+        } 
+        catch (PDOException $e) 
+        {
+            exit($e->getMessage());
+        }
+    }
+
+
+    /*
+     * Read all lessons
+     * @return $mixed
+     * 
+     * */
+    public function get_lessons()
+    {
+        try 
+        {
+            $db = DB();
+            $query = $db->prepare("SELECT * FROM `lesson`");
+            $query->execute();
+            if ($query->rowCount() > 0) 
+            {
+                return $query->fetchAll(PDO::FETCH_OBJ);
+            }
+            else
+            {
+                return [];
+            }
+        } 
+        catch (PDOException $e) 
+        {
+            exit($e->getMessage());
+        }
+    }
+
+    /*
+     * Read lesson with given id
+     * @return $mixed
+     * */
+    public function get_lesson($id)
+    {
+        try 
+        {
+            $db = DB();
+            $query = $db->prepare("SELECT * FROM `lesson` WHERE `le_id` = :id ");
+            $query->bindParam("id", $id, PDO::PARAM_INT);
+            $query->execute();
+            if ($query->rowCount() > 0) {
+                $result = $query->fetch(PDO::FETCH_OBJ);
+                return $result;
+            }
+            else
+            {
+                return -1;
+            }
+        } 
+        catch (PDOException $e) 
+        {
+            exit($e->getMessage());
+        }
+    }
+
+    
+
+
+    /*
+     * Read all the lessons she/he not attends
+     * @param $id student id
+     * @return $mixed
+     * */
+    public function available_lessons($sid)
+    {
+        try 
+        {
+            $db = DB();
+            $query = $db->prepare("SELECT * FROM `lesson` WHERE `le_id` NOT IN (SELECT `at_lesson_id` FROM `attends` WHERE `at_student_id` = :id)");
+            $query->bindParam("id", $sid, PDO::PARAM_INT);
+            $query->execute();
+            if ($query->rowCount() > 0) 
+            {
+                return $query->fetchAll(PDO::FETCH_OBJ);
+            }
+            else
+            {
+                return [];
+            }
+        } 
+        catch (PDOException $e) 
+        {
+            exit($e->getMessage());
+        }
+    }
+
+    // END OF LESSON
+
+   //ATTENDS
+   /*
+     * Read all the lessons she/he attends
+     * @param $id student id
+     * @return $mixed
+     * 
+     * */
+    public function attends_lessons($sid)
+    {
+        try 
+        {
+            $db = DB();
+            $query = $db->prepare("SELECT `at_lesson_id` FROM `attends` WHERE `at_student_id` = :id ");
+            $query->bindParam("id", $sid, PDO::PARAM_INT);
+            $query->execute();
+            if ($query->rowCount() > 0) 
+            {
+                return $query->fetchAll(PDO::FETCH_OBJ);
+            }
+            else
+            {
+                return [];
+            }
+            
+        } 
+        catch (PDOException $e) 
+        {
+            exit($e->getMessage());
+        }
+    }
+
+    /*
+     * Create new attending lesson by student
+     * @param $student, $lesson
+     * @return ID
+     * */
+    public function attends($student, $lesson)
+    {
+        try {
+            $db = DB();
+            
+            $query = $db->prepare("INSERT INTO `attends`(`at_student_id`, `at_lesson_id`) VALUES (:s,:l)");
+            $query->bindParam("s", $student, PDO::PARAM_STR);
+            $query->bindParam("l", $lesson, PDO::PARAM_INT);
             $query->execute();
             return $db->lastInsertId();
         } catch (PDOException $e) {
             exit($e->getMessage());
         }
     }
+   //END OF ATTENDS
 
     
 
@@ -272,85 +416,14 @@ class Library
     
     
 
-    /*
-     * get lessons
-     * @return $mixed
-     * 
-     * */
-    public function get_all_lessons()
-    {
-        try 
-        {
-            $db = DB();
-            $query = $db->prepare("SELECT * FROM `lesson`");
-            $query->execute();
-            if ($query->rowCount() > 0) 
-            {
-                return $query->fetchAll();
-            }
-            else
-            {
-                return 0;
-            }
-        } 
-        catch (PDOException $e) 
-        {
-            exit($e->getMessage());
-        }
-    }
+    
     
 
-    public function get_student_lessons($id)
-    {
-        try 
-        {
-            $db = DB();
-            $query = $db->prepare("SELECT `at_lesson_id` FROM `attends` WHERE `at_student_id` = :id ");
-            $query->bindParam("id", $id, PDO::PARAM_INT);
-            $query->execute();
-            return $query->fetchAll();
-            
-        } 
-        catch (PDOException $e) 
-        {
-            exit($e->getMessage());
-        }
-    }
-
-    //avail_lessons
-    // SELECT * FROM `lesson` WHERE `le_id` NOT IN (SELECT `at_lesson_id` FROM `attends` WHERE `at_student_id` = student_id)
     
-    public function get_available_lessons($id)
-    {
-        try 
-        {
-            $db = DB();
-            $query = $db->prepare("SELECT * FROM `lesson` WHERE `le_id` NOT IN (SELECT `at_lesson_id` FROM `attends` WHERE `at_student_id` = :id)");
-            $query->bindParam("id", $id, PDO::PARAM_INT);
-            $query->execute();
-            return $query->fetchAll();
-        } 
-        catch (PDOException $e) 
-        {
-            exit($e->getMessage());
-        }
-    }
 
-    public function get_lesson_name($id)
-    {
-        try 
-        {
-            $db = DB();
-            $query = $db->prepare("SELECT `le_name` FROM `lesson` WHERE `le_id` = :id ");
-            $query->bindParam("id", $id, PDO::PARAM_INT);
-            $query->execute();
-            return $query->fetch();
-        } 
-        catch (PDOException $e) 
-        {
-            exit($e->getMessage());
-        }
-    }
+    
+
+    
 
     public function get_all_students()
     {
@@ -534,29 +607,7 @@ class Library
 
     
 
-    public function get_lesson($id)
-    {
-        try 
-        {
-            $db = DB();
-            $query = $db->prepare("SELECT * FROM `lesson` WHERE `le_id` = :id ");
-            $query->bindParam("id", $id, PDO::PARAM_INT);
-            $query->execute();
-            if ($query->rowCount() > 0)
-            {
-                $result = $query->fetch();
-                return $result;
-            }
-            else
-            {
-                return 0;
-            }
-        } 
-        catch (PDOException $e) 
-        {
-            exit($e->getMessage());
-        }
-    }
+    
 
     public function notifications_for_guardian($id)
     {

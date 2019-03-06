@@ -90,7 +90,7 @@
   <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
       <h6 class="collapse-header">Σελιδες:</h6>
-      <a class="collapse-item" href="lessons.php">Κατάλογος Μαθημάτων</a>
+      <a class="collapse-item" href="list_lessons.php">Κατάλογος Μαθημάτων</a>
       <a class="collapse-item" href="new_lesson.php">Δημιουργία Μαθήματος</a>
     </div>
   </div>
@@ -113,7 +113,7 @@
 
 <!-- Nav Item - tags -->
 <li class="nav-item">
-  <a class="nav-link" href="tags.php">
+  <a class="nav-link" href="list_tags.php">
     <i class="fas fa-fw fa-tag"></i>
     <span>Ετικέτες</span></a>
 </li>

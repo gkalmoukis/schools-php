@@ -1,17 +1,12 @@
 <?php
-ob_start();
-session_start();
-
-if(empty($_SESSION['id']))
-{
-    header("Location: login.php");
-}
+require './core/auth.php';
 require './core/library.php';
+require './common/alert.php';
 $app = new Library();
 if( isset($_GET["id"]) ) 
   {
     $student_id = $_GET["id"];
-    $form_link= "new_student_lesson.php?id=".$student_id;
+    $form_link= "details_student_add_lesson.php?id=".$student_id;
   }
   else
   {
@@ -24,7 +19,7 @@ if( isset($_GET["id"]) )
     //get student name
     $name = $student["stu_name"];
     //get student avail lessons 
-    $avail_lessons = $app->get_available_lessons($student_id);
+    $avail_lessons = $app->available_lessons($student_id);
   }
   else
   {
@@ -33,7 +28,7 @@ if( isset($_GET["id"]) )
 $error_message = "";
 $success_message = "";
 // check register request
-if (!empty($_POST['add'])) 
+if (!empty($_POST['submit'])) 
   {
       extract($_POST);
       if (!isset($lesson) )
@@ -43,10 +38,10 @@ if (!empty($_POST['add']))
       else 
       {
 
-          $app->new_student_lesson($student_id, $lesson);
-          $lesson_name = $app->get_lesson_name($lesson);
-          $avail_lessons = $app->get_available_lessons($student_id);
-          $success_message = "Προστέθηκε το μάθημα <strong>".$lesson_name["le_name"]."</strong>";  
+          $app->attends($student_id, $lesson);
+          $lesson_name = $app->get_lesson($lesson)->le_name;
+          $avail_lessons = $app->available_lessons($student_id);
+          $success_message = "Προστέθηκε το μάθημα <strong>".$lesson_name."</strong>";  
       }
   }
 ?>
@@ -61,7 +56,7 @@ if (!empty($_POST['add']))
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title>Δήλωση μαθήματος</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -93,41 +88,23 @@ if (!empty($_POST['add']))
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-          <!-- error alert -->
-          <?php
-            if ($error_message != "") {
+          <!-- request response -->
+          <?php 
+            if($success_message != "")
+            {
+              echo success($success_message);
+            }
+            if($error_message != "")
+            {
+              echo failure($error_message);
+            }
           ?>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <?php echo $error_message; ?>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <?php
-            }
-            ?>
-            <!-- /error alert -->
-
-            <!-- success alert -->
-            <?php
-            if ($success_message != "") {
-            ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <?php echo $success_message; ?>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <?php
-            }
-            ?>
-            <!-- /success alert -->  
           
     
           <!-- Basic Card Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Φόρμα προσθήκης μαθήματος για τον μαθητή: <?php echo $name; ?></h6>
+                <h6 class="m-0 font-weight-bold text-primary">Φόρμα δήλωσης μαθήματος για τον μαθητή: <?php echo $name; ?></h6>
             </div>
             <div class="card-body">
                 <form class="user" method="post">
@@ -138,7 +115,7 @@ if (!empty($_POST['add']))
                             <?php 
                                 foreach ($avail_lessons as $option) {
                             ?>
-                                <option value='<?php echo $option['le_id']; ?>' ><?php echo $option['le_name']; ?></option>
+                                <option value='<?php echo $option->le_id; ?>' ><?php echo $option->le_name; ?></option>
                             <?php
                                     
                                 }
@@ -146,7 +123,7 @@ if (!empty($_POST['add']))
                         </select>
                     </div>
                 </div>
-                    <input type="submit" name="add" class="btn btn-primary btn-user btn-block" value="Προσθήκη">
+                    <input type="submit" name="submit" class="btn btn-primary btn-user btn-block" value="Προσθήκη">
                     <hr>
                 </form>
             </div>

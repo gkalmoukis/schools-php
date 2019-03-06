@@ -84,7 +84,7 @@
                 {
                    
                     echo "<span class='badge badge-pill badge-info'>"
-                         .$app->get_lesson($notification["not_lesson_id"])["le_name"]
+                         .$app->get_lesson($notification["not_lesson_id"])->le_name
                          ."</span>";
                 }  
                 ?>

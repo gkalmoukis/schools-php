@@ -1,10 +1,5 @@
 <?php  
-ob_start();
- session_start();
- if(empty($_SESSION['id']))
- {
-     header("Location: login.php");
- }
+require './core/auth.php';
   require './core/library.php';
   $app = new Library();
 ?>
@@ -19,7 +14,7 @@ ob_start();
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title>Μαθήματα</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -56,17 +51,16 @@ ob_start();
 
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Κατάλογος Μαθημάτων</h1>
-          <p class="mb-4">Για την εισαγωγή νέου μαθήματος επισκεφτείτε την φόρμα <a href="new_lesson.php">εισαγωγή νέου μαθήματος</a>.</p>
 
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Διαθέσιμοι μαθήματα</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Πίνακας Μαθημάτων</h6>
             </div>
             <div class="card-body">
               <?php 
-                $lessons = $app->get_all_lessons();
-                if ($lessons == 0) 
+                $lessons = $app->get_lessons();
+                if ($lessons == []) 
                 {
                     # code...
                 }
@@ -91,7 +85,7 @@ ob_start();
                   {  
                   ?>      
                     <tr>
-                        <td><?php echo $row["le_name"]; ?></td>
+                        <td><?php echo $row->le_name; ?></td>
                     </tr>
                   <?php } ?>      
                     

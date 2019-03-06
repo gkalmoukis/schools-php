@@ -7,7 +7,7 @@
   //get all guardians
   $count_guardians = count($app->get_users(2));
   //get all lessons
-  $count_lessons = count($app->get_all_lessons());
+  $count_lessons = count($app->get_lessons());
 ?>
 
 <!DOCTYPE html>

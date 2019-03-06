@@ -6,11 +6,11 @@
   if( isset($_GET["id"]) ) 
   {
     $student_id = $_GET["id"];
-    $form_link= "new_student_lesson.php?id=".$student_id;
+    $form_link= "details_student_add_lesson.php?id=".$student_id;
   }
   else
   {
-      header("Location: 404.php");
+    header("Location: 404.php");
   }
   //get student
   $student = $app->get_student($student_id);
@@ -21,20 +21,16 @@
     //get student guardian
     $guardian =  $app->get_user($student["stu_guardian_id"])->usr_name;
     //get student lessons
-    $lessons = $app->get_student_lessons($student_id);
+    $lessons = $app->attends_lessons($student_id);
     //get student lessons count
     $count = count($lessons);
     //get student avail lessons 
-    $avail_lessons = $app->get_available_lessons($student_id);
+    $avail_lessons = $app->available_lessons($student_id);
   }
   else
   {
     header("Location: 404.php");
   }
-
-  
-  
-  
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -133,7 +129,7 @@
             <div class="card-body">
               <?php 
                 
-                if (count($lessons) == 0) 
+                if ($lessons == []) 
                 {
                     # code...
                 }
@@ -158,7 +154,7 @@
                   {  
                   ?>      
                     <tr>
-                        <td><?php echo $app->get_lesson_name($row["at_lesson_id"])["le_name"]; ?></td>
+                        <td><?php echo $app->get_lesson($row->at_lesson_id)->le_name; ?></td>
                     </tr>
                   <?php } ?>      
                     
