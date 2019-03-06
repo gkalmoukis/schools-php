@@ -1,11 +1,5 @@
 <?php
-ob_start();  
-session_start();
-
-if(empty($_SESSION['id']))
-{
-    header("Location: login.php");
-}
+  require './core/auth.php';
   require './core/library.php';
   $app = new Library();
 ?>
@@ -20,7 +14,7 @@ if(empty($_SESSION['id']))
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title>Μαθητές</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -57,12 +51,11 @@ if(empty($_SESSION['id']))
 
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Κατάλογος Μαθητών</h1>
-          <p class="mb-4">Για την εισαγωγή νέου μαθητή επισκεφτείτε την φόρμα <a href="new_student.php">εισαγωγής νέου μαθητή</a>.</p>
 
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Διαθέσιμοι Μαθητές</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Πίνακας μαθητών</h6>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -93,11 +86,14 @@ if(empty($_SESSION['id']))
                     {
                       foreach ($app->get_all_students() as $key) 
                       {
-                          $profile_link = "student_profile.php?id=".$key["stu_id"];
+                          $profile_link = "details_student.php?id=".$key["stu_id"];
+                          // get guardian name
+                          $guardian_name =  $app->get_user($key["stu_guardian_id"])->usr_name;
+                          
                   ?>
                         <tr>
                           <td><?php echo $key["stu_name"]; ?></td>
-                          <td><?php echo $app->get_user_name($key["stu_guardian_id"]); ?></td>
+                          <td><?php echo $guardian_name ?></td>
                           <td>
                             <a href="<?php echo $profile_link; ?>" class="btn btn-primary btn-circle">
                                 <i class="fas fa-chalkboard"></i>

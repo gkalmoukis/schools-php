@@ -3,14 +3,14 @@ require 'database.php';
 /*
  * giokalm
  *
- * Page: Application library
+ * Application library
  * */
 
 
 
 class Library
 {
-    // TAGS
+    // TAG
     
     /*
      * Create tag
@@ -86,16 +86,17 @@ class Library
         }
     }
 
-    // END OF TAGS
+    // END OF TAG
     
+    // USER
     
     /*
-     * Register New User
-     * INSERT INTO `user`(`usr_id`, `usr_name`, `usr_email`, `usr_key`) VALUES ()
-     * @param $name, $email, $username, $password
+     * Create New User
+     * @param $firstname, $lastname, $email, $password, $role 
+     * role: 1 admin ,2: guardian
      * @return ID
      * */
-    public function Register($firstname, $lastname, $email, $password, $role)
+    public function new_user($firstname, $lastname, $email, $password, $role)
     {
         try {
             $db = DB();
@@ -114,6 +115,87 @@ class Library
             exit($e->getMessage());
         }
     }
+
+    /*
+     * authenticate user with given credentials
+     *
+     * @param $username, $password
+     * @return $mixed
+     * */
+    public function authenticate($email, $password)
+    {
+        try 
+        {
+            $db = DB();
+            $query = $db->prepare("SELECT `usr_id`,`usr_name`,`usr_role` FROM user WHERE  `usr_email`=:email AND usr_key=:key");
+            $query->bindParam("email", $email, PDO::PARAM_STR);
+            $enc_password = hash('sha256', $password);
+            $query->bindParam("key", $enc_password, PDO::PARAM_STR);
+            $query->execute();
+            if ($query->rowCount() == 1) 
+            {
+                $result = $query->fetch(PDO::FETCH_OBJ);
+                return $result;
+            } 
+            else 
+            {
+                return false;
+            }
+        } 
+        catch (PDOException $e) 
+        {
+            exit($e->getMessage());
+        }
+    }
+
+    /*
+     * Read all users with given role
+     * @return $mixed
+     * */
+    public function get_users($role)
+    {
+        try {
+            $db = DB();
+            $query = $db->prepare("SELECT * FROM `user` WHERE `usr_role` = :r");
+            $query->bindParam("r", $role, PDO::PARAM_INT);
+            $query->execute();
+            if ($query->rowCount() > 0) {
+                return $query->fetchAll(PDO::FETCH_OBJ);
+            }
+            else
+            {
+                return [];
+            }
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    /*
+     * Read user with given id
+     * @return $mixed
+     * */
+    public function get_user($id)
+    {
+        try {
+            $db = DB();
+            $query = $db->prepare("SELECT * FROM `user` WHERE `usr_id` = :id");
+            $query->bindParam("id", $id, PDO::PARAM_INT);
+            $query->execute();
+            if ($query->rowCount() > 0) {
+                $result = $query->fetch(PDO::FETCH_OBJ);
+                return $result;
+            }
+            else
+            {
+                return -1;
+            }
+        } catch (PDOException $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    // END OF USER
 
     /*
      * Insert new lesson
@@ -182,76 +264,12 @@ class Library
         }
     }
 
-    /*
-     * Login
-     *
-     * @param $username, $password
-     * @return $mixed
-     * */
-    public function Login($username, $password)
-    {
-        try {
-            $db = DB();
-            $query = $db->prepare("SELECT user_id FROM users WHERE (username=:username OR email=:username) AND password=:password");
-            $query->bindParam("username", $username, PDO::PARAM_STR);
-            $enc_password = hash('sha256', $password);
-            $query->bindParam("password", $enc_password, PDO::PARAM_STR);
-            $query->execute();
-            if ($query->rowCount() > 0) {
-                $result = $query->fetch(PDO::FETCH_OBJ);
-                return $result->user_id;
-            } else {
-                return false;
-            }
-        } catch (PDOException $e) {
-            exit($e->getMessage());
-        }
-    }
+    
 
 
+    
 
-    /*
-     * get Users
-     * @return $mixed
-     * */
-    public function get_all_users($role)
-    {
-        try {
-            $db = DB();
-            $query = $db->prepare("SELECT * FROM `user` WHERE `usr_role` = :r");
-            $query->bindParam("r", $role, PDO::PARAM_INT);
-            $query->execute();
-            if ($query->rowCount() > 0) {
-                return $query->fetchAll();
-            }
-            else
-            {
-                return 0;
-            }
-        } catch (PDOException $e) {
-            exit($e->getMessage());
-        }
-    }
-
-    public function get_user_name($id)
-    {
-        try {
-            $db = DB();
-            $query = $db->prepare("SELECT `usr_name` FROM `user` WHERE `usr_id` = :id");
-            $query->bindParam("id", $id, PDO::PARAM_INT);
-            $query->execute();
-            if ($query->rowCount() > 0) {
-                $result = $query->fetch(PDO::FETCH_OBJ);
-                return $result->usr_name;
-            }
-            else
-            {
-                return 0;
-            }
-        } catch (PDOException $e) {
-            exit($e->getMessage());
-        }
-    }
+    
     
 
     /*

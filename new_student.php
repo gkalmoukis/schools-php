@@ -1,18 +1,13 @@
 <?php
-ob_start();
-session_start();
-
-if(empty($_SESSION['id']))
-{
-    header("Location: login.php");
-}
+require './core/auth.php';
 require './core/library.php';
+require './common/alert.php';
 $app = new Library();
 
 $error_message = "";
 $success_message = "";
 // check register request
-if (!empty($_POST['submit_guardian'])) 
+if (!empty($_POST['submit'])) 
 {
     extract($_POST);
     if ($firstname == "" || $lastname == "" || $guardian=="-1") 
@@ -22,7 +17,7 @@ if (!empty($_POST['submit_guardian']))
     else 
     {
         $app->new_student($firstname, $lastname, $guardian);
-        $success_message = "Ολα γκούντ!";
+        $success_message = "Εντάξει!";
     }
 }
 ?>
@@ -37,7 +32,7 @@ if (!empty($_POST['submit_guardian']))
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title>Προσθήκη μαθητή</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -69,39 +64,23 @@ if (!empty($_POST['submit_guardian']))
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-          <!-- error alert -->
-          <?php
-            if ($error_message != "") {
+          <!-- request response -->
+          <?php 
+            if($success_message != "")
+            {
+              echo success($success_message);
+            }
+            if($error_message != "")
+            {
+              echo failure($error_message);
+            }
           ?>
-            <div class="card mb-4 py-3 border-left-danger">
-            <div class="card-body">
-                <?php echo $error_message; ?>
-            </div>
-            </div>
-            <?php
-            }
-            ?>
-            <!-- /error alert -->
-
-            <!-- success alert -->
-            <?php
-            if ($success_message != "") {
-            ?>
-            <div class="card mb-4 py-3 border-left-success">
-            <div class="card-body">
-                <?php echo $success_message; ?>
-            </div>
-            </div>
-            <?php
-            }
-            ?>
-            <!-- /success alert -->  
           
     
           <!-- Basic Card Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Φόρμα εισαγωγής νέου κηδεμόνα</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Φόρμα εισαγωγής νέου μαθητή</h6>
             </div>
             <div class="card-body">
             <form method="post">
@@ -114,7 +93,7 @@ if (!empty($_POST['submit_guardian']))
                   </div>
                 </div>
                 <?php  
-                    $guardians = $app->get_all_users(2);
+                    $guardians = $app->get_users(2);
                 ?>
                 <div class="form-group row">
                     <div class="col-sm-12">
@@ -123,7 +102,7 @@ if (!empty($_POST['submit_guardian']))
                            <?php 
                                 foreach ($guardians as $option) {
                             ?>
-                                <option value='<?php echo $option['usr_id']; ?>' ><?php echo $option['usr_name']; ?></option>
+                                <option value='<?php echo $option->usr_id; ?>' ><?php echo $option->usr_name; ?></option>
                             <?php
                                     
                                 }
@@ -132,7 +111,7 @@ if (!empty($_POST['submit_guardian']))
                     </div>
                 </div>
 
-                <input type="submit" name="submit_guardian" class="btn btn-primary btn-user btn-block" value="Εισαγωγή">
+                <input type="submit" name="submit" class="btn btn-primary btn-user btn-block" value="Εισαγωγή">
                 <hr>
               </form>
             </div>

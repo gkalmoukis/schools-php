@@ -36,8 +36,8 @@
   <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
       <h6 class="collapse-header">Σελιδες:</h6>
-      <a class="collapse-item" href="administrators.php">Κατάλογος Διαχειριστών</a>
-      <a class="collapse-item" href="new_admin.php">Νέος Διαχειριστής</a>
+      <a class="collapse-item" href="list_administrators.php">Κατάλογος Διαχειριστών</a>
+      <a class="collapse-item" href="new_administrator.php">Νέος Διαχειριστής</a>
     </div>
   </div>
 </li>
@@ -51,7 +51,7 @@
   <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
       <h6 class="collapse-header">Σελιδες:</h6>
-      <a class="collapse-item" href="guardians.php">Κατάλογος Κηδεμόνων</a>
+      <a class="collapse-item" href="list_guardians.php">Κατάλογος Κηδεμόνων</a>
       <a class="collapse-item" href="new_guardian.php">Εισαγωγή Κηδεμόνα</a>
     </div>
   </div>
@@ -105,7 +105,7 @@
   <div id="collapseP" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
       <h6 class="collapse-header">Σελιδες:</h6>
-      <a class="collapse-item" href="students.php">Κατάλογος Μαθητών</a>
+      <a class="collapse-item" href="list_students.php">Κατάλογος Μαθητών</a>
       <a class="collapse-item" href="new_student.php">Εισαγωγή νέου Μαθητή</a>
     </div>
   </div>

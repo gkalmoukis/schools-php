@@ -1,19 +1,11 @@
 <?php
-ob_start();
-session_start();
-
-if(empty($_SESSION['id']))
-{
-    header("Location: login.php");
-}
+require './core/auth.php';
 require './core/library.php';
 require './common/alert.php';
 $app = new Library();
-
 $error_message = "";
 $success_message = "";
-// check register request
-if (!empty($_POST['submit_guardian'])) 
+if (!empty($_POST['submit'])) 
 {
     extract($_POST);
     if ($firstname == "" || $lastname == "" || $email == "" || $password == "" || $repassword == "") 
@@ -34,8 +26,8 @@ if (!empty($_POST['submit_guardian']))
     } 
     else 
     {
-        $app->Register($firstname, $lastname, $email, $password, 1);
-        $success_message = "Ολα γκούντ!";
+        $app->new_user($firstname, $lastname, $email, $password, 1);
+        $success_message = "Εντάξει!";
     }
 }
 ?>
@@ -50,7 +42,7 @@ if (!empty($_POST['submit_guardian']))
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title>Προσθήκη διαχειρηστή</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -122,7 +114,7 @@ if (!empty($_POST['submit_guardian']))
                     <input type="password" id="repassword" name="repassword"  placeholder="Επαλήθευση κωδικού" class="form-control form-control-user">
                   </div>
                 </div>
-                <input type="submit" name="submit_guardian" class="btn btn-primary btn-user btn-block" value="Εισαγωγή">
+                <input type="submit" name="submit" class="btn btn-primary btn-user btn-block" value="Εισαγωγή">
                 <hr>
               </form>
             </div>

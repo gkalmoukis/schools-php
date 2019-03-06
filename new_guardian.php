@@ -1,42 +1,36 @@
 <?php
-ob_start();
-session_start();
+  require './core/auth.php';
+  require './core/library.php';
+  $app = new Library();
 
-if(empty($_SESSION['id']))
-{
-    header("Location: login.php");
-}
-require './core/library.php';
-$app = new Library();
-
-$error_message = "";
-$success_message = "";
-// check register request
-if (!empty($_POST['submit_guardian'])) 
-{
-    extract($_POST);
-    if ($firstname == "" || $lastname == "" || $email == "" || $password == "" || $repassword == "") 
-    {
-        $error_message = "Μη Συμπληρωμένη φόρμα";
-    }  
-    else if ($password != $password) 
-    {
-        $error_message = "Οι κωδικοί δεν ταιρίαζουν";
-    } 
-    else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
-    {
-        $error_message = 'Λανθασμένη μορφή email';
-    } 
-    else if ($app->isEmail($_POST['email'])) 
-    {
-        $error_message = 'Το email υπάρχει';
-    } 
-    else 
-    {
-        $app->Register($firstname, $lastname, $email, $password, 2);
-        $success_message = "Ολα γκούντ!";
-    }
-}
+  $error_message = "";
+  $success_message = "";
+  // check register request
+  if (!empty($_POST['submit'])) 
+  {
+      extract($_POST);
+      if ($firstname == "" || $lastname == "" || $email == "" || $password == "" || $repassword == "") 
+      {
+          $error_message = "Μη Συμπληρωμένη φόρμα";
+      }  
+      else if ($password != $password) 
+      {
+          $error_message = "Οι κωδικοί δεν ταιρίαζουν";
+      } 
+      else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
+      {
+          $error_message = 'Λανθασμένη μορφή email';
+      } 
+      else if ($app->isEmail($_POST['email'])) 
+      {
+          $error_message = 'Το email υπάρχει';
+      } 
+      else 
+      {
+          $app->new_user($firstname, $lastname, $email, $password, 2);
+          $success_message = "Εντάξει!";
+      }
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,7 +43,7 @@ if (!empty($_POST['submit_guardian']))
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title>Προσθήκη κηδεμόνα</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -81,33 +75,17 @@ if (!empty($_POST['submit_guardian']))
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-          <!-- error alert -->
-          <?php
-            if ($error_message != "") {
-          ?>
-            <div class="card mb-4 py-3 border-left-danger">
-            <div class="card-body">
-                <?php echo $error_message; ?>
-            </div>
-            </div>
-            <?php
+          <!-- request response -->
+          <?php 
+            if($success_message != "")
+            {
+              echo success($success_message);
             }
-            ?>
-            <!-- /error alert -->
-
-            <!-- success alert -->
-            <?php
-            if ($success_message != "") {
-            ?>
-            <div class="card mb-4 py-3 border-left-success">
-            <div class="card-body">
-                <?php echo $success_message; ?>
-            </div>
-            </div>
-            <?php
+            if($error_message != "")
+            {
+              echo failure($error_message);
             }
-            ?>
-            <!-- /success alert -->  
+          ?>  
           
     
           <!-- Basic Card Example -->
@@ -136,7 +114,7 @@ if (!empty($_POST['submit_guardian']))
                     <input type="password" id="repassword" name="repassword"  placeholder="Επαλήθευση κωδικού" class="form-control form-control-user">
                   </div>
                 </div>
-                <input type="submit" name="submit_guardian" class="btn btn-primary btn-user btn-block" value="Εισαγωγή">
+                <input type="submit" name="submit" class="btn btn-primary btn-user btn-block" value="Εισαγωγή">
                 <hr>
               </form>
             </div>

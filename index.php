@@ -1,22 +1,13 @@
 <?php 
-ob_start();
-  session_start();
-
-  if(empty($_SESSION['id']))
-  {
-      header("Location: login.php");
-  }
-
+  require './core/auth.php';
   require './core/library.php';
   $app = new Library();
   //get all students
   $count_students = count($app->get_all_students());
   //get all guardians
-  $count_guardians = count($app->get_all_users(2));
+  $count_guardians = count($app->get_users(2));
   //get all lessons
   $count_lessons = count($app->get_all_lessons());
-  
-
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +21,7 @@ ob_start();
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Dashboard</title>
+  <title>Dashboard</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

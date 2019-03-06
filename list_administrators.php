@@ -1,13 +1,8 @@
 <?php  
-  ob_start();
- session_start();
-
- if(empty($_SESSION['id']))
- {
-     header("Location: login.php");
- }
+  require './core/auth.php';
   require './core/library.php';
   $app = new Library();
+  $administrators = $app->get_users(1);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +15,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title>Διαχειριστές</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -54,15 +49,15 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
-
+       
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Κατάλογος Διαχειριστών</h1>
-          <p class="mb-4">Πίνακας με όλους του διαχειριστές του συστηματος. Για την εισαγωγή νέου διαχειριστή επισκεφτείτε την φόρμα <a href="register.php">εισαγωγή νέου διαχειριστή</a>.</p>
+          
 
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Διαθέσιμοι διαχειριστές</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Πίνακας διαχειριστών</h6>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -81,22 +76,17 @@
                   </tfoot>
                   <tbody>
                   <?php
-                    if($app->get_all_users(1) == 0)
-                    {
-                        // todo na paei auth i sinthiki panw apo ton pinaka
-                    } 
-                    else
-                    {
-                      foreach ($app->get_all_users(1) as $key) 
+                    
+                      foreach ($administrators as $row) 
                       {
                   ?>
                         <tr>
-                          <td><?php echo $key["usr_name"]; ?></td>
-                          <td><?php echo $key["usr_email"]; ?></td>
+                          <td><?php echo $row->usr_name; ?></td>
+                          <td><?php echo $row->usr_email; ?></td>
                         </tr>
                   <?php
                       }
-                    }  
+                     
                   ?>                   
                   </tbody>
                 </table>

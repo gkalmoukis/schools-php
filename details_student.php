@@ -1,11 +1,5 @@
 <?php 
-ob_start(); 
-session_start();
-
-if(empty($_SESSION['id']))
-{
-    header("Location: login.php");
-}
+  require './core/auth.php';
   require './core/library.php';
   $app = new Library();
   //get student id
@@ -25,7 +19,7 @@ if(empty($_SESSION['id']))
     //get student name
     $name = $student["stu_name"];
     //get student guardian
-    $guardian = $app->get_user_name($student["stu_guardian_id"]);
+    $guardian =  $app->get_user($student["stu_guardian_id"])->usr_name;
     //get student lessons
     $lessons = $app->get_student_lessons($student_id);
     //get student lessons count
@@ -53,7 +47,7 @@ if(empty($_SESSION['id']))
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title><?php echo $name; ?></title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

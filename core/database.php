@@ -22,11 +22,12 @@ else
     define('PASSWORD', 'admin'); // user password  (if password is not set for user then keep it empty )
     define('DATABASE', 'id7587350_stage_db'); // Database Database name
 }
+
 function DB()
 {
     try 
     {
-        $db = new PDO('mysql:host='.HOST.';dbname='.DATABASE.'', USER, PASSWORD);
+        $db = new PDO('mysql:host='.HOST.';dbname='.DATABASE, USER, PASSWORD);
         return $db;
     } 
     catch (PDOException $e) 

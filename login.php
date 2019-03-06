@@ -1,15 +1,16 @@
 <?php
   ob_start();
   session_start();
-  require './core/authentication.php';
-  $auth = new Authentication();
+  require './core/library.php';
+ 
+  $app = new Library();
   if(!empty($_POST['submit']) )
   {
     extract($_POST);
     // prepei na exei epilexthei enas mathitis kai ena keimeno
     if ( $email != "" && $password != "" ) 
     {
-      $user = $auth->login($email,$password);
+      $user = $app->authenticate($email,$password);
       if(!$user)
       {
         echo "er";
@@ -18,14 +19,14 @@
       else
       {
         print_r($user);
-        $_SESSION["id"] = $user["usr_id"];
-        $_SESSION["role"] = $user["usr_role"];
-        $_SESSION["name"] = $user["usr_name"];
-        if($user["usr_role"] == "1")
+        $_SESSION["id"] = $user->usr_id;
+        $_SESSION["role"] = $user->usr_role;
+        $_SESSION["name"] = $user->usr_name;
+        if($user->usr_role == 1)
         {
           header("Location: index.php");
         }
-        else if($user["usr_role"] == 2)
+        else if($user->usr_role == 2)
         {
 
           header("Location: guardian_front_test.php");

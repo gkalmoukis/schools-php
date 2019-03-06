@@ -1,11 +1,5 @@
 <?php 
-ob_start(); 
-  session_start();
-
-  if(empty($_SESSION['id']))
-  {
-      header("Location: login.php");
-  }
+  require './core/auth.php';
   require './core/library.php';
   $app = new Library();
 ?>
@@ -20,7 +14,7 @@ ob_start();
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title>Κηδεμόνες</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -57,12 +51,11 @@ ob_start();
 
           <!-- Page Heading -->
           <h1 class="h3 mb-2 text-gray-800">Κατάλογος Κηδεμόνων</h1>
-          <p class="mb-4">Για την εισαγωγή νέου κηδεμόνα επισκεφτείτε την φόρμα <a href="new_guardian.php">εισαγωγής νέου κηδεμόνα</a>.</p>
 
           <!-- DataTales Example -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
-              <h6 class="m-0 font-weight-bold text-primary">Διαθέσιμοι Κηδεμόνες</h6>
+              <h6 class="m-0 font-weight-bold text-primary">Πίνακας κηδεμόνων</h6>
             </div>
             <div class="card-body">
               <div class="table-responsive">
@@ -81,18 +74,18 @@ ob_start();
                   </tfoot>
                   <tbody>
                   <?php
-                    if($app->get_all_users(2) == 0)
+                    if($app->get_users(2) == [])
                     {
                         // todo na paei auth i sinthiki panw apo ton pinaka
                     } 
                     else
                     {
-                      foreach ($app->get_all_users(2) as $key) 
+                      foreach ($app->get_users(2) as $row) 
                       {
                   ?>
                         <tr>
-                          <td><?php echo $key["usr_name"]; ?></td>
-                          <td><?php echo $key["usr_email"]; ?></td>
+                          <td><?php echo $row->usr_name; ?></td>
+                          <td><?php echo $row->usr_email; ?></td>
                         </tr>
                   <?php
                       }
