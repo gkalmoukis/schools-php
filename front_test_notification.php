@@ -9,7 +9,7 @@
 
   require './core/library.php';
   $app = new Library();
-  $notification =  $app->get_notifications($_GET['id']);
+  $notification =  $app->get_notification($_GET['id']);
 
   
 
@@ -65,7 +65,7 @@
 
         <div class="card mb-4  border-left-primary">
             <div class="card-body">
-                <?php echo $notification["not_date"]; ?>
+                <?php echo $notification->not_date; ?>
             </div>
         </div>
 
@@ -73,22 +73,22 @@
             
             <div class="card-body">
                 <?php
-                if($notification["not_tag_id"] != -1)
+                if($notification->not_tag_id != -1)
                 {
                     
                     echo "<span class='badge badge-pill badge-primary'>"
-                         .$app->get_tag($notification["not_tag_id"])->tag_name
+                         .$app->get_tag($notification->not_tag_id)->tag_name
                          ."</span>";
                 }
-                if($notification["not_lesson_id"] != -1)
+                if($notification->not_lesson_id != -1)
                 {
                    
                     echo "<span class='badge badge-pill badge-info'>"
-                         .$app->get_lesson($notification["not_lesson_id"])->le_name
+                         .$app->get_lesson($notification->not_lesson_id)->le_name
                          ."</span>";
                 }  
                 ?>
-                <?php echo "<br>".$notification["not_text"]; ?>
+                <?php echo "<br>".$notification->not_text; ?>
             </div>
         </div>
           

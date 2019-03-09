@@ -321,7 +321,7 @@ class Library
         try 
         {
             $db = DB();
-            $query = $db->prepare("SELECT `at_lesson_id` FROM `attends` WHERE `at_student_id` = :id ");
+            $query = $db->prepare("SELECT * FROM `lesson` WHERE `le_id` IN (SELECT `at_lesson_id` FROM `attends` WHERE `at_student_id` = :id)");
             $query->bindParam("id", $sid, PDO::PARAM_INT);
             $query->execute();
             if ($query->rowCount() > 0) 
@@ -359,13 +359,12 @@ class Library
             exit($e->getMessage());
         }
     }
-   //END OF ATTENDS
-
+    //END OF ATTENDS
     
-
+    // STUDENT
+    
     /*
-     * Insert new lesson
-     * INSERT INTO `student`(`stu_name`, `stu_guardian_id`) VALUES ([value-1],[value-2])
+     * Create new student
      * @param $firstname, $lastname, $guardian
      * @return ID
      * */
@@ -383,8 +382,8 @@ class Library
             exit($e->getMessage());
         }
     }
+    // END OF STUDENT
 
-    
     /*
      * Check Email
      *
@@ -407,25 +406,8 @@ class Library
             exit($e->getMessage());
         }
     }
-
-    
-
-
-    
-
-    
-    
-
-    
-    
-
-    
-
-    
-
-    
-
-    public function get_all_students()
+ 
+    public function get_students()
     {
         try 
         {
@@ -434,7 +416,7 @@ class Library
             $query->execute();
             if ($query->rowCount() > 0) 
             {
-                return $query->fetchAll();
+                return $query->fetchAll(PDO::FETCH_OBJ);
             }
             else
             {
@@ -458,12 +440,12 @@ class Library
             $query->execute();
             if ($query->rowCount() > 0)
             {
-                $result = $query->fetch();
+                $result = $query->fetch(PDO::FETCH_OBJ);
                 return $result;
             }
             else
             {
-                return 0;
+                return [];
             }
         } 
         catch (PDOException $e) 
@@ -558,7 +540,7 @@ class Library
         }
     }
 
-    public function get_all_notifications()
+    public function get_notifications()
     {
         try 
         {
@@ -567,11 +549,11 @@ class Library
             $query->execute();
             if ($query->rowCount() > 0) 
             {
-                return $query->fetchAll();
+                return $query->fetchAll(PDO::FETCH_OBJ);
             }
             else
             {
-                return 0;
+                return [];
             }
         } 
         catch (PDOException $e) 
@@ -580,7 +562,7 @@ class Library
         }
     }
 
-    public function get_notifications($id)
+    public function get_notification($id)
     {
         try 
         {
@@ -590,12 +572,12 @@ class Library
             $query->execute();
             if ($query->rowCount() > 0)
             {
-                $result = $query->fetch();
+                $result = $query->fetch(PDO::FETCH_OBJ);
                 return $result;
             }
             else
             {
-                return 0;
+                return [];
             }
         } 
         catch (PDOException $e) 
@@ -623,7 +605,7 @@ class Library
             }
             else
             {
-                return 0;
+                return [];
             }
         } 
         catch (PDOException $e) 

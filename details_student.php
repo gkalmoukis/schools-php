@@ -14,12 +14,12 @@
   }
   //get student
   $student = $app->get_student($student_id);
-  if ($student != 0)
+  if ($student != [] )
   {
     //get student name
-    $name = $student["stu_name"];
+    $name = $student->stu_name;
     //get student guardian
-    $guardian =  $app->get_user($student["stu_guardian_id"])->usr_name;
+    $guardian =  $app->get_user($student->stu_guardian_id)->usr_name;
     //get student lessons
     $lessons = $app->attends_lessons($student_id);
     //get student lessons count
@@ -154,7 +154,7 @@
                   {  
                   ?>      
                     <tr>
-                        <td><?php echo $app->get_lesson($row->at_lesson_id)->le_name; ?></td>
+                        <td><?php echo $app->get_lesson($row->le_id)->le_name; ?></td>
                     </tr>
                   <?php } ?>      
                     

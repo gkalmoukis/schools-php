@@ -76,7 +76,7 @@
     <div class="bg-white py-2 collapse-inner rounded">
       <h6 class="collapse-header">Σελιδες:</h6>
       <a class="collapse-item" href="notification_history.php">Ιστορικό ανακοινώσεων</a>
-      <a class="collapse-item" href="notification_student.php">Νέα ανακοίνωση</a>
+      <!-- <a class="collapse-item" href="notification_student.php">Νέα ανακοίνωση</a> -->
     </div>
   </div>
 </li>

@@ -4,27 +4,27 @@ require './core/library.php';
 require './common/alert.php';
 $app = new Library();
 if( isset($_GET["id"]) ) 
-  {
-    $student_id = $_GET["id"];
-    $form_link= "details_student_add_lesson.php?id=".$student_id;
-  }
-  else
-  {
-      //404 page
-  }
-  //get student
-  $student = $app->get_student($student_id);
-  if ($student != 0)
-  {
-    //get student name
-    $name = $student["stu_name"];
-    //get student avail lessons 
-    $avail_lessons = $app->available_lessons($student_id);
-  }
-  else
-  {
-      //404 page
-  }
+{
+  $student_id = $_GET["id"];
+  $form_link= "details_student_add_lesson.php?id=".$student_id;
+}
+else
+{
+    //404 page
+}
+//get student
+$student = $app->get_student($student_id);
+if ($student != [])
+{
+  //get student name
+  $name = $student->stu_name;
+  //get student avail lessons 
+  $avail_lessons = $app->available_lessons($student_id);
+}
+else
+{
+    //404 page
+}
 $error_message = "";
 $success_message = "";
 // check register request

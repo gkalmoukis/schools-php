@@ -78,25 +78,29 @@
                   </tfoot>
                   <tbody>
                   <?php
-                    if($app->get_all_students() == 0)
+                    if($app->get_students() == 0)
                     {
                         // todo na paei auth i sinthiki panw apo ton pinaka
                     } 
                     else
                     {
-                      foreach ($app->get_all_students() as $key) 
+                      foreach ($app->get_students() as $row) 
                       {
-                          $profile_link = "details_student.php?id=".$key["stu_id"];
+                          $profile_link = "details_student.php?id=".$row->stu_id;
+                          $notification_link = "notification_student.php?student=".$row->stu_id;
                           // get guardian name
-                          $guardian_name =  $app->get_user($key["stu_guardian_id"])->usr_name;
+                          $guardian_name =  $app->get_user($row->stu_guardian_id)->usr_name;
                           
                   ?>
                         <tr>
-                          <td><?php echo $key["stu_name"]; ?></td>
+                          <td><?php echo $row->stu_name; ?></td>
                           <td><?php echo $guardian_name ?></td>
                           <td>
                             <a href="<?php echo $profile_link; ?>" class="btn btn-primary btn-circle">
                                 <i class="fas fa-chalkboard"></i>
+                            </a>
+                            <a href="<?php echo $notification_link; ?>" class="btn btn-primary btn-circle">
+                                <i class="fas fa-bell"></i>
                             </a>
                           </td>
                         </tr>

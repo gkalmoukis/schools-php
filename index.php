@@ -3,7 +3,7 @@
   require './core/library.php';
   $app = new Library();
   //get all students
-  $count_students = count($app->get_all_students());
+  $count_students = count($app->get_students());
   //get all guardians
   $count_guardians = count($app->get_users(2));
   //get all lessons
@@ -55,7 +55,7 @@
           <!-- Page Heading --> 
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-            <a href="notification_student.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-bell fa-sm text-white-50"></i> Νέα ανακοίνωση</a>
+            <!-- <a href="notification_student.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-bell fa-sm text-white-50"></i> Νέα ανακοίνωση</a> -->
           </div>
 
           <!-- Content Row -->

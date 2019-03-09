@@ -1,16 +1,10 @@
 <?php
-ob_start();  
-  session_start();
-
-  if(empty($_SESSION['id']))
-  {
-      header("Location: login.php");
-  }
+  require './core/auth.php';
   require './core/library.php';
   $app = new Library();
   
   //get all tags
-  $notifications = $app->get_all_notifications();
+  $notifications = $app->get_notifications();
   
 ?>
 <!DOCTYPE html>
@@ -24,7 +18,7 @@ ob_start();
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title>Ιστορικό Ενημερώσεων</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -62,7 +56,7 @@ ob_start();
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Ιστορικό ανακοιώνσεων</h1>
-            <a href="notification_student.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-tag fa-sm text-white-50"></i> Νέα ανακοίνωση</a>
+            <!-- <a href="notification_student.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-tag fa-sm text-white-50"></i> Νέα ανακοίνωση</a> -->
           </div>
 
           <!-- DataTales Example -->
@@ -73,7 +67,7 @@ ob_start();
             <div class="card-body">
               <?php 
                 
-                if (count($notifications) == 0) 
+                if (count($notifications) == []) 
                 {
                     echo "no notifications";
                 }
@@ -92,7 +86,7 @@ ob_start();
                   </thead>
                   <tfoot>
                     <tr>
-                    <th>Ημερομινία</th>
+                      <th>Ημερομινία</th>
                       <th>Μαθητής</th>
                       <th>Μάθημα</th>
                       <th>Ετικέτα</th>
@@ -105,10 +99,34 @@ ob_start();
                   ?>      
                     <tr>
                     <!-- not_id	not_date	not_tag_id	not_lesson_id	not_student_id -->
-                        <td><?php echo $row["not_date"]; ?></td>
-                        <td><?php echo $row["not_student_id"]; ?></td>
-                        <td><?php echo $row["not_lesson_id"]; ?></td>
-                        <td><?php echo $row["not_tag_id"]; ?></td>
+                        <td><?php echo $row->not_date; ?></td>
+                        <td><?php echo $app->get_student($row->not_student_id)->stu_name; ?></td>
+                        <td>
+                          <?php 
+                            if ($row->not_lesson_id == -1)
+                            {
+                              echo "";
+                            }
+                            else
+                            {
+                              echo $app->get_lesson($row->not_lesson_id)->le_name;
+                            }
+                             
+                          ?>
+                        </td>
+                        <td>
+                        <?php 
+                          if($row->not_tag_id == -1)
+                          {
+                            echo "";
+                          }
+                          else
+                          {
+                            echo $app->get_tag($row->not_tag_id)->tag_name; 
+                          }
+                         
+                        ?>
+                        </td>
                     </tr>
                   <?php } ?>      
                     

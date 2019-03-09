@@ -1,27 +1,22 @@
 <?php
-ob_start();
-session_start();
-
-if(empty($_SESSION['id']))
-{
-    header("Location: login.php");
-}
+  require './core/auth.php'; 
   require './core/library.php';
   require './common/alert.php';
   $app = new Library();
   $success_message = "";
   $error_message = "";
-  //get students 
-  $students = $app->get_all_students();
+  //get student 
+  $student = $_GET["student"];
+
   //get lessons
-  $lessons = $app->get_all_lessons();
+  $lessons = $app->attends_lessons($student);
   //get tags
   $tags = $app->get_tags();
   if(!empty($_POST['submit']) )
   {
     extract($_POST);
     // prepei na exei epilexthei enas mathitis kai ena keimeno
-    if ( isset($student) && $text != "" ) 
+    if ( $text != "" ) 
     {
       // proeretika ena mathima 
       if(isset($lesson))
@@ -61,7 +56,7 @@ if(empty($_SESSION['id']))
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin 2 - Blank</title>
+  <title>Δημιουργία ανακοίνωσης</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -117,20 +112,6 @@ if(empty($_SESSION['id']))
             </div>
             <div class="card-body">
                 <form method="post">
-                    <!-- student select -->
-                    <div class="form-group">
-                        <select class="form-control custom-select" name="student">
-                           <option value="-1" selected disabled>Επιλέξτε μαθητή</option>
-                           <?php 
-                                foreach ($students as $option) {
-                            ?>
-                                <option value='<?php echo $option['stu_id']; ?>' ><?php echo $option['stu_name']; ?></option>
-                            <?php
-                                    
-                                }
-                           ?>                    
-                        </select>
-                    </div>  
                     <!-- lesson and tag -->
                     <div class="form-group row">
                         <div class="col-sm-6 mb-3 mb-sm-0">
@@ -139,7 +120,7 @@ if(empty($_SESSION['id']))
                                 <?php 
                                         foreach ($lessons as $option) {
                                     ?>
-                                        <option value='<?php echo $option['le_id']; ?>' ><?php echo $option['le_name']; ?></option>
+                                        <option value='<?php echo $option->le_id; ?>' ><?php echo $option->le_name; ?></option>
                                     <?php
                                             
                                         }
